@@ -192,12 +192,6 @@
                             </div>
                         </div>
 
-                        <!-- Volume by Body Part Chart -->
-                        <h3 class="text-white text-xl font-bold leading-tight tracking-[-0.015em] pb-2 pt-4">Volume by Body Part</h3>
-                        <div class="rounded-xl bg-white/5 p-4 border border-white/10">
-                            <div id="body-part-strength-graph" class="w-full h-[450px] rounded-lg"></div>
-                        </div>
-
                         <!-- Weekly Total Volume -->
                         <h3 class="text-white text-xl font-bold leading-tight tracking-[-0.015em] pb-2 pt-6">Weekly Total Volume</h3>
                         <div class="rounded-xl bg-white/5 p-4 border border-white/10">
@@ -838,41 +832,7 @@
 
             Plotly.newPlot('workout-consistency-graph', [trace], layout, {responsive: true});
         }
-
-        function drawBodyPartChart() {
-            const data = processedData.strengthByBodyPart;
-            const traces = [];
-            const bodyParts = [...new Set(data.map(d => d.Bereich))];
-
-            // Using Plotly's default color scale
-            bodyParts.forEach(part => {
-                const partData = data.filter(d => d.Bereich === part);
-                traces.push({
-                    x: partData.map(d => `${d.year}-W${padWeek(d.week_number)}`), // Apply padding
-                    y: partData.map(d => d.Volume),
-                    type: 'scatter',
-                    mode: 'lines+markers',
-                    name: part,
-                    line: { shape: 'spline' }, // Smooth the lines
-                    marker: { size: 4 }
-                });
-            });
-           
-            const layout = getPlotlyLayout({
-                title: { text: 'Volume Progression by Body Part' },
-                xaxis: {
-                    title: 'Week',
-                    type: 'category',
-                    categoryorder: 'array', // <-- FIX: Force order
-                    categoryarray: processedData.allWeeksSorted // <-- FIX: Use master list
-                },
-                yaxis: { title: 'Total Volume (kg)' },
-                legend: { orientation: 'h', y: -0.2 }
-            });
-
-            Plotly.newPlot('body-part-strength-graph', traces, layout, {responsive: true});
-        }
-       
+      
         function drawExerciseCharts(selectedExercise) {
             if (!selectedExercise) return;
            
@@ -1241,7 +1201,6 @@
 
             // Redraw plotly charts if they are in the active tab (fixes resize issue)
             if (tabId === 'tab-2') {
-                Plotly.Plots.resize('body-part-strength-graph');
                 Plotly.Plots.resize('weekly-volume-graph');
             } else if (tabId === 'tab-3') {
                 Plotly.Plots.resize('exercise-volume-graph');
