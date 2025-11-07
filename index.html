@@ -195,7 +195,7 @@
                         <!-- Weekly Total Volume -->
                         <h3 class="text-white text-xl font-bold leading-tight tracking-[-0.015em] pb-2 pt-6">Weekly Total Volume</h3>
                         <div class="rounded-xl bg-white/5 p-4 border border-white/10">
-                            <div id="weekly-volume-graph" class="w-full h-[300px] rounded-lg"></div>
+                            <div id="weekly-volume-graph" class="w-full h-[600px] rounded-lg"></div>
                         </div>
 
                         <!-- Body Part Balance (Sets) -->
@@ -364,20 +364,32 @@
         };
 
         function getPlotlyLayout(customConfig = {}) {
-
             // Deep merge customConfig into darkPlotlyLayout
-
             let layout = JSON.parse(JSON.stringify(darkPlotlyLayout)); // Deep copy
-         
-            if (customConfig.title) layout.title = { text: customConfig.title, font: { color: '#ffffff', size: 18 } };
-            if (customConfig.xaxis) Object.assign(layout.xaxis, customConfig.xaxis);
-            if (customConfig.yaxis) Object.assign(layout.yaxis, customConfig.yaxis);
-            if (customConfig.legend) Object.assign(layout.legend, customConfig.legend);
-            if (customConfig.dragmode) layout.dragmode = customConfig.dragmode;
+
+            // Merge nested objects (like xaxis, yaxis) individually
+            if (customConfig.title) {
+                layout.title = { ...layout.title, ...customConfig.title };
+            }
+            if (customConfig.xaxis) {
+                layout.xaxis = { ...layout.xaxis, ...customConfig.xaxis };
+            }
+            if (customConfig.yaxis) {
+                layout.yaxis = { ...layout.yaxis, ...customConfig.yaxis };
+            }
+            if (customConfig.legend) {
+                layout.legend = { ...layout.legend, ...customConfig.legend };
+            }
+            if (customConfig.polar) {
+                layout.polar = { ...layout.polar, ...customConfig.polar };
+            }
+
+            // Apply all top-level properties from customConfig to layout
+            // This is the part that will add 'barmode', 'annotations', etc.
+            Object.assign(layout, customConfig);
+
             return layout;
         }
-
-
 
         // --- UTILITY FUNCTIONS ---
         function parseDate(dateStr) {
@@ -697,7 +709,6 @@
             drawThisWeekGoal(); // <-- UPDATED
             drawWorkoutCalendarHeatmap();
             drawWorkoutConsistencyChart();
-            drawBodyPartChart();
             drawWeeklyVolumeChart();
             // Wire up body part balance filter and initial draw
             const balanceFilter = document.getElementById('balance-time-filter');
@@ -961,7 +972,7 @@
             }
         }
 
-        // --- Body Part Balance (Spider/Radar) ---
+        // --- Weekly Volume Chart ---
         function drawWeeklyVolumeChart() {
             const data = processedData.validSets || [];
             if (!data.length) return;
@@ -976,7 +987,7 @@
             // Group sets by week and exercise, calculate volume
             const weeklyExerciseVolumes = {};
             const activeExercises = new Set(); // Track exercises actually performed
-            let maxTotalVolume = 0;
+            let maxTotalVolume = 0; // <-- Re-added this
 
             data.forEach(set => {
                 // Skip if year is invalid
@@ -986,17 +997,14 @@
                 // Only process sets from the last 5 weeks
                 if (lastFiveWeeks.includes(weekKey)) {
                     if (!weeklyExerciseVolumes[weekKey]) {
-                        weeklyExerciseVolumes[weekKey] = {
-                            exercises: {},
-                            total: 0
-                        };
+                        weeklyExerciseVolumes[weekKey] = { exercises: {}, total: 0 }; // <-- Re-added total
                     }
                     if (!weeklyExerciseVolumes[weekKey].exercises[set.exercise]) {
                         weeklyExerciseVolumes[weekKey].exercises[set.exercise] = 0;
                     }
                     weeklyExerciseVolumes[weekKey].exercises[set.exercise] += set.volume;
-                    weeklyExerciseVolumes[weekKey].total += set.volume;
-                    maxTotalVolume = Math.max(maxTotalVolume, weeklyExerciseVolumes[weekKey].total);
+                    weeklyExerciseVolumes[weekKey].total += set.volume; // <-- Re-added total
+                    maxTotalVolume = Math.max(maxTotalVolume, weeklyExerciseVolumes[weekKey].total); // <-- Re-added max total
                     activeExercises.add(set.exercise); // Track this exercise as active
                 }
             });
@@ -1010,16 +1018,13 @@
                 return {
                     x: lastFiveWeeks,
                     y: volumes,
-                    type: 'bar',
                     name: exercise,
-                    hoverinfo: 'name+text',
-                    hovertemplate: '<b>%{fullData.name}</b><br>' +
-                                 'Volume: %{y:,.0f} kg<br>' +
-                                 '<extra>Week %{x}</extra>',
-                    width: 0.7 // Make bars narrower to fit in the week
+                    type: 'bar',        // <-- CHANGED: Back to 'bar'
+                    hoverinfo: 'name+y',
+                    hovertemplate: '<b>' + exercise + '</b><br>Volume: %{y:,.0f} kg<extra></extra>' // <-- CHANGED: Show absolute volume
                 };
             });
-
+            
             // Add total volume annotations
             const annotations = lastFiveWeeks.map(week => {
                 const totalVolume = weeklyExerciseVolumes[week]?.total || 0;
@@ -1038,37 +1043,34 @@
             });
 
             const layout = getPlotlyLayout({
-                barmode: 'stack',
-                showlegend: true,
+                title: { text: 'Weekly Total Volume (Last 5 Weeks)' },
+                barmode: 'stack', // <-- ADDED: This makes it a stacked bar chart
                 xaxis: {
                     title: 'Week',
                     type: 'category',
-                    categoryorder: 'array',
+                    categoryorder: 'array', 
                     categoryarray: lastFiveWeeks,
                     tickangle: 0
                 },
                 yaxis: { 
-                    title: 'Volume (kg)',
+                    title: 'Total Volume (kg)', // <-- CHANGED: Back to absolute
                     rangemode: 'tozero',
-                    range: [0, maxTotalVolume * 1.2] // Add 20% padding for annotations
+                    range: [0, maxTotalVolume * 1.2] // <-- Add 20% padding for annotations
                 },
-                annotations: annotations,
+                annotations: annotations, // <-- ADDED: Put annotations back
                 legend: {
                     orientation: 'h',
                     yanchor: 'bottom',
-                    y: -0.3, // Moved down slightly to accommodate annotations
+                    y: -0.3,
                     xanchor: 'left',
                     x: 0,
                     bgcolor: 'rgba(0,0,0,0.3)',
                     bordercolor: 'rgba(255,255,255,0.1)',
                     borderwidth: 1,
                     font: { color: '#ffffff99' }
-                },
-                bargap: 0.4,  // Increase gap between weeks
-                bargroupgap: 0.0, // No gap within the stack
-                barmode: 'stack'
+                }
             });
-
+            
             const config = {
                 responsive: true,
                 modeBarButtonsToRemove: ['lasso2d', 'select2d'],
@@ -1077,16 +1079,47 @@
 
             Plotly.newPlot('weekly-volume-graph', traces, layout, config);
 
-            // Add click handlers for the legend
+            // Get the graph div
             const graphDiv = document.getElementById('weekly-volume-graph');
-            graphDiv.on('plotly_legendclick', function(data) {
-                return false; // Prevents the default behavior of hiding the trace
-            });
-            graphDiv.on('plotly_legenddoubleclick', function(data) {
-                return false; // Prevents the default behavior of hiding all other traces
+            
+            // --- NEW CODE: Update totals on legend click ---
+            graphDiv.on('plotly_restyle', function(data) {
+                const newAnnotations = [];
+                const lastFiveWeeks = layout.xaxis.categoryarray; // Get weeks from layout
+
+                lastFiveWeeks.forEach((week, weekIndex) => {
+                    let newTotal = 0;
+                    
+                    // Loop through all traces
+                    graphDiv.data.forEach(trace => {
+                        // Check if trace is visible
+                        if (trace.visible === true || trace.visible === undefined) {
+                            // Add this trace's value for the current week
+                            newTotal += trace.y[weekIndex];
+                        }
+                    });
+
+                    // Add a new annotation for the recalculated total
+                    newAnnotations.push({
+                        x: week,
+                        y: newTotal,
+                        text: `${newTotal.toLocaleString('en-US', { maximumFractionDigits: 0 })} kg`,
+                        showarrow: false,
+                        yanchor: 'bottom',
+                        yshift: 10,
+                        font: {
+                            color: '#ffffff99',
+                            size: 12
+                        }
+                    });
+                });
+
+                // Update the layout with the new annotations
+                Plotly.relayout(graphDiv, { annotations: newAnnotations });
             });
         }
 
+        // --- Body Part Balance (Spider/Radar) ---
         function drawBodyPartBalanceChart(timePeriod = '90') {
             const chartContainer = document.getElementById('body-part-balance-chart');
             const allSets = processedData.validSets || [];
@@ -1202,6 +1235,7 @@
             // Redraw plotly charts if they are in the active tab (fixes resize issue)
             if (tabId === 'tab-2') {
                 Plotly.Plots.resize('weekly-volume-graph');
+                Plotly.Plots.resize('body-part-balance-chart');
             } else if (tabId === 'tab-3') {
                 Plotly.Plots.resize('exercise-volume-graph');
                 Plotly.Plots.resize('exercise-1rm-graph');
