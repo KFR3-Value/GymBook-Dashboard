@@ -24,39 +24,24 @@
     <script>
 
         tailwind.config = {
-
             darkMode: "class",
-
             theme: {
-
                 extend: {
-
                     colors: {
-
                         "primary": "#13ec5b",
-
                         "background-light": "#f6f8f6",
-
                         "background-dark": "#102216",
-
                     },
 
                     fontFamily: {
-
                         "display": ["Lexend", "sans-serif"]
-
                     },
 
                     borderRadius: {
-
                         "DEFAULT": "0.25rem",
-
                         "lg": "0.5rem",
-
                         "xl": "0.75rem",
-
                         "full": "9999px"
-
                     },
 
                     // Add the new grid columns for the heatmap
@@ -1830,31 +1815,19 @@
 
             window.scrollTo(0, 0);
 
-        });
-
-       
+        });   
 
         // --- INITIALIZATION ---
-
-       
-
+    
         function startApp() {
 
             // Check for script errors
-
             if (scriptErrors.length > 0) {
-
                  console.error("Aborting app start due to script load errors.");
-
                  const loadingIndicator = document.getElementById('loading-indicator');
-
                  loadingIndicator.innerHTML = `<p class="text-red-400">Failed to load critical libraries: ${scriptErrors.join(', ')}. Please check your internet connection and try refreshing.</p>`;
-
                  return;
-
             }
-
-
 
             // Poll for libraries
 
@@ -1890,32 +1863,16 @@
 
                     </div>
 
-                `;
-
-               
+                `; 
 
                 // Add event listener to the file input
-
                 document.getElementById('csv-upload').addEventListener('change', handleFileUpload);
-
-               
-
             } else {
-
                 console.log("Waiting for libraries to load...");
-
                 setTimeout(startApp, 100); // Check again
-
             }
-
         }
-
-
-
         document.addEventListener('DOMContentLoaded', startApp);
-
-
-
     </script>
 </body>
 </html>
