@@ -3,10 +3,8 @@
 <head>
 
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Workout Data Dashboard</title>
-
 
     <!-- New styles from your layout -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
@@ -22,7 +20,6 @@
     <script src="papaparse.min.js" defer onerror="handleScriptError(this)"></script>
 
     <script>
-
         tailwind.config = {
             darkMode: "class",
             theme: {
@@ -47,15 +44,10 @@
                     // Add the new grid columns for the heatmap
 
                     gridTemplateColumns: {
-
                         '26': 'repeat(26, minmax(0, 1fr))',
-
                     }
-
                 },
-
             },
-
         }
 
     </script>
@@ -65,85 +57,55 @@
         body {
 
             -webkit-font-smoothing: antialiased;
-
             -moz-osx-font-smoothing: grayscale;
-
             min-height: max(884px, 100dvh);
-
         }
 
         /* Styling for active tab */
 
         .tab-btn.active {
-
             color: #13ec5b;
-
         }
 
         .tab-btn.active .material-symbols-outlined {
-
             color: #13ec5b;
-
         }
 
         .tab-btn.active .tab-label {
-
             color: #13ec5b;
-
         }
 
-       
-
         .tab-btn {
-
             color: #ffffff99; /* white/60 */
-
         }
 
         .tab-btn .tab-label {
-
             color: #ffffff99;
-
         }
-
-
 
         /* Hide inactive tab content */
 
         .tab-content {
-
             display: none;
-
         }
 
         .tab-content.active {
-
             display: block;
-
         }
 
         /* Custom dropdown arrow */
 
         select {
-
             appearance: none;
-
             background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2392c9a4%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E');
-
             background-repeat: no-repeat;
-
             background-position: right 0.75rem center;
-
             background-size: 1.25em 1.25em;
-
             padding-right: 2.5rem;
-
         }
 
         .material-symbols-outlined {
-
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-
         }
 
     </style>
@@ -152,24 +114,16 @@
 
 <body class="bg-background-light dark:bg-background-dark font-display text-white">
 
-
-
-    <div class="relative flex h-auto min-h-screen w-full flex-col">
-
-       
+    <div class="relative flex h-auto min-h-screen w-full flex-col">       
 
         <!-- Top App Bar (Title will be updated by JS) -->
 
         <header class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10">
-
             <div class="flex size-12 shrink-0 items-center justify-start">
-
                 <!-- <span class="material-symbols-outlined text-white/90">arrow_back</span> -->
-
             </div>
 
             <h1 id="header-title" class="text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Dashboard</h1>
-
             <div class="flex w-12 items-center justify-end">
 
                 <!-- <button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 bg-transparent text-white/90 gap-2 text-base font-bold leading-normal tracking-[0.015em] min-w-0 p-0">
@@ -179,15 +133,10 @@
                 </button> -->
 
             </div>
-
         </header>
-
        
-
         <main class="flex-grow px-4 pb-24"> <!-- Add padding-bottom for bottom nav -->
-
            
-
             <!-- Loading / Upload Prompt -->
 
             <div id="loading-indicator" class="text-center py-10">
@@ -204,21 +153,15 @@
 
             </div>
 
-
-
             <!-- Dashboard Container (hidden by default) -->
 
             <div id="dashboard-container" class="hidden">
 
                 <div id="tab-content-container">
-
-                   
-
+                
                     <!-- Tab 1: Workout Consistency (from Layout 1) -->
 
                     <div id="tab-1" class="tab-content active">
-
-
 
                         <!-- NEW: This Week's Goal -->
 
@@ -237,9 +180,7 @@
                                 <div id="goal-dot-3" class="w-5 h-5 rounded-full bg-white/10 transition-all duration-500"></div>
 
                             </div>
-
-                           
-
+                        
                             <!-- Text on the side -->
 
                             <div class="pl-4 text-center border-l border-white/10">
@@ -253,8 +194,6 @@
                         </div>
 
                         <!-- END: This Week's Goal -->
-
-
 
                         <!-- Stats -->
 
@@ -285,15 +224,11 @@
                             </div>
 
                         </div>
-
-                       
-
+                    
                         <!-- Headline Text -->
 
                         <h2 class="text-white tracking-light text-[28px] font-bold leading-tight text-left pb-3 pt-8">Workouts per Week</h2>
-
-                       
-
+                    
                         <!-- NEW Calendar Heatmap -->
 
                         <div id="workout-calendar-heatmap" class="w-full rounded-lg bg-white/5 border border-white/10 p-4">
@@ -301,8 +236,6 @@
                             <!-- Content will be generated by JS -->
 
                         </div>
-
-
 
                         <!-- Bar Chart (Original) - We can keep it or remove it. Let's keep it for now. -->
 
@@ -316,142 +249,78 @@
 
                     </div>
 
-
-
                     <!-- Tab 2: Strength Metrics (from Layout 2) -->
 
                     <div id="tab-2" class="tab-content">
 
                         <!-- Hero Card (Static) -->
-
                         <div class="flex flex-col items-stretch justify-start rounded-xl bg-white/5 mt-2">
-
                             <div class="flex w-full min-w-72 grow flex-col items-stretch justify-center gap-1 p-6">
-
                                 <p class="text-[#92c9a4] text-sm font-normal leading-normal">Lifetime Lifted</p>
-
                                 <p id="stat-total-volume" class="text-white text-4xl font-bold leading-tight tracking-[-0.015em] text-primary">--</p>
-
                                 <div class="flex items-end gap-3 justify-between pt-2">
-
                                     <div class="flex flex-col gap-1">
-
                                         <p class="text-[#92c9a4] text-base font-normal leading-normal">Your total volume since you started tracking.</p>
-
                                     </div>
-
                                 </div>
-
                             </div>
-
                         </div>
-
-
 
                         <!-- Volume by Body Part Chart -->
-
                         <h3 class="text-white text-xl font-bold leading-tight tracking-[-0.015em] pb-2 pt-4">Volume by Body Part</h3>
-
                         <div class="rounded-xl bg-white/5 p-4 border border-white/10">
-
                             <div id="body-part-strength-graph" class="w-full h-[450px] rounded-lg"></div>
-
                         </div>
-
                     </div>
 
-
-
                     <!-- Tab 3: Strength by Exercise (from Layout 3) -->
-
                     <div id="tab-3" class="tab-content">
-
                         <!-- Dropdown -->
-
                         <div class="max-w-md mx-auto my-6">
-
                             <label for="exercise-dropdown" class="block text-sm font-medium text-[#92c9a4] mb-1">Select an Exercise</label>
-
                             <select id="exercise-dropdown" class="block w-full bg-white/5 border border-white/20 text-white rounded-lg p-3 text-base focus:border-primary focus:ring-primary">
-
                                 <option>Loading exercises...</option>
-
                             </select>
-
                         </div>
 
-
-
                         <!-- Charts Section -->
-
                         <section class="flex flex-col gap-4 rounded-xl bg-[#193322]/50 p-4">
-
                             <!-- Volume Chart -->
-
                             <h2 class="text-white text-base font-medium leading-normal">Total Volume (kg)</h2>
-
                             <div class="flex min-h-[200px] flex-1 flex-col">
-
                                 <div id="exercise-volume-graph" class="w-full h-full rounded-lg"></div>
-
                             </div>
 
                             <!-- 1RM Chart -->
-
                             <h2 class="text-white text-base font-medium leading-normal mt-6">Estimated 1RM (kg)</h2>
-
                             <div class="flex min-h-[200px] flex-1 flex-col">
-
                                 <div id="exercise-1rm-graph" class="w-full h-full rounded-lg"></div>
-
                             </div>
-
                         </section>
-
                     </div>
-
                 </div>
-
             </div>
-
         </main>
-
-
 
         <!-- Bottom Navigation Bar -->
 
         <nav id="bottom-nav" class="sticky bottom-0 bg-background-dark/80 backdrop-blur-sm border-t border-white/10 hidden">
-
             <div class="mx-auto flex max-w-md justify-around p-2">
-
                 <a href="#" class="tab-btn flex flex-col items-center gap-1 p-2 rounded-lg w-20 active bg-primary/20" data-tab="tab-1" data-title="Consistency">
-
                     <span class="material-symbols-outlined">calendar_month</span>
-
                     <span class="tab-label text-xs text-primary">Consistency</span>
-
                 </a>
-
                 <a href="#" class="tab-btn flex flex-col items-center gap-1 p-2 rounded-lg w-20" data-tab="tab-2" data-title="Strength Metrics">
-
                     <span class="material-symbols-outlined">monitoring</span>
-
                     <span class="tab-label text-xs">Metrics</span>
-
                 </a>
 
                 <a href="#" class="tab-btn flex flex-col items-center gap-1 p-2 rounded-lg w-20" data-tab="tab-3" data-title="Exercise Details">
-
                     <span class="material-symbols-outlined">fitness_center</span>
-
                     <span class="tab-label text-xs">Exercises</span>
-
                 </a>
-
             </div>
-
         </nav>
-
     </div>
                     <!-- Body Part Balance (Sets) -->
                     <h3 class="text-white text-xl font-bold leading-tight tracking-[-0.015em] pb-2 pt-6">Body Part Balance (by Total Sets)</h3>
@@ -471,101 +340,60 @@
         // --- SCRIPT LOADING ---
 
         let scriptErrors = [];
-
         function handleScriptError(script) {
-
             console.error(`Failed to load script: ${script.src}`);
-
             scriptErrors.push(script.src);
-
         }
-
-
 
         // --- GLOBAL DATA STORE ---
 
         let processedData = {
-
             workoutsPerWeek: [],
-
             strengthByBodyPart: [],
-
             strengthByExercise: [],
-
             exerciseOptions: [],
-
             allWeeksSorted: [], // To store the master week list
-
             currentWeekWorkouts: 0, // <-- NEW: For the triangle
-
             validSets: [], // store parsed valid sets for the balance chart
-
             streaks: {
-
                 current: 0,
-
                 longest: 0
-
             }
-
         };
-
-       
 
         // --- PLOTLY LAYOUT (UPDATED FOR DARK MODE) ---
 
         const darkPlotlyLayout = {
-
             plot_bgcolor: "rgba(0,0,0,0)",
-
             paper_bgcolor: "rgba(0,0,0,0)",
-
             font: { color: "#ffffff99" }, // white/60
-
             xaxis: {
-
                 gridcolor: "rgba(255, 255, 255, 0.1)", // white/10
-
                 linecolor: "rgba(255, 255, 255, 0.1)",
-
                 zerolinecolor: "rgba(255, 255, 255, 0.2)"
-
             },
 
             yaxis: {
-
                 gridcolor: "rgba(255, 255, 255, 0.1)",
-
                 linecolor: "rgba(255, 255, 255, 0.1)",
-
                 zerolinecolor: "rgba(255, 255, 255, 0.2)"
-
             },
 
             legend: {
-
                 font: { color: "#ffffff99" }
-
             },
 
             hovermode: 'x unified',
-
             dragmode: 'pan', // Allow panning
-
             margin: { l: 50, r: 20, t: 60, b: 50 } // Adjust margins
-
         };
-
-
 
         function getPlotlyLayout(customConfig = {}) {
 
             // Deep merge customConfig into darkPlotlyLayout
 
             let layout = JSON.parse(JSON.stringify(darkPlotlyLayout)); // Deep copy
-
            
-
             if (customConfig.title) layout.title = { text: customConfig.title, font: { color: '#ffffff', size: 18 } };
 
             if (customConfig.xaxis) Object.assign(layout.xaxis, customConfig.xaxis);
@@ -576,16 +404,12 @@
 
             if (customConfig.dragmode) layout.dragmode = customConfig.dragmode;
 
-
-
             return layout;
-
         }
 
 
 
         // --- UTILITY FUNCTIONS ---
-
         function parseDate(dateStr) {
 
             if (!dateStr) return null;
@@ -603,8 +427,6 @@
             return null;
 
         }
-
-
 
         // Function to get the week number
 
