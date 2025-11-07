@@ -208,12 +208,12 @@
                         <!-- Charts Section -->
                         <section class="flex flex-col gap-4 rounded-xl bg-[#193322]/50 p-4">
                             <!-- Volume Chart -->
-                            <h2 class="text-white text-base font-medium leading-normal">Total Volume (lbs)</h2>
+                            <h2 class="text-white text-base font-medium leading-normal">Total Volume (kg)</h2>
                             <div class="flex min-h-[200px] flex-1 flex-col">
                                 <div id="exercise-volume-graph" class="w-full h-full rounded-lg"></div>
                             </div>
                             <!-- 1RM Chart -->
-                            <h2 class="text-white text-base font-medium leading-normal mt-6">Estimated 1RM (lbs)</h2>
+                            <h2 class="text-white text-base font-medium leading-normal mt-6">Estimated 1RM (kg)</h2>
                             <div class="flex min-h-[200px] flex-1 flex-col">
                                 <div id="exercise-1rm-graph" class="w-full h-full rounded-lg"></div>
                             </div>
@@ -587,7 +587,7 @@
             document.getElementById('stat-total-workouts').textContent = totalWorkouts;
             
             const totalVolume = processedData.strengthByBodyPart.reduce((sum, d) => sum + d.Volume, 0);
-            document.getElementById('stat-total-volume').textContent = `${totalVolume.toLocaleString('en-US', { maximumFractionDigits: 0 })} lbs`;
+            document.getElementById('stat-total-volume').textContent = `${totalVolume.toLocaleString('en-US', { maximumFractionDigits: 0 })} kg`;
 
             // NEW: Populate streak cards
             document.getElementById('stat-current-streak').textContent = processedData.streaks.current;
@@ -768,7 +768,7 @@
                     categoryorder: 'array', // <-- FIX: Force order
                     categoryarray: processedData.allWeeksSorted // <-- FIX: Use master list
                 },
-                yaxis: { title: 'Total Volume (lbs)' },
+                yaxis: { title: 'Total Volume (kg)' },
                 legend: { orientation: 'h', y: -0.2 }
             });
 
@@ -799,7 +799,7 @@
                     categoryorder: 'array', // <-- FIX: Force order
                     categoryarray: processedData.allWeeksSorted // <-- FIX: Use master list
                 },
-                yaxis: { title: 'Volume (lbs)' }
+                yaxis: { title: 'Volume (kg)' }
             });
             Plotly.newPlot('exercise-volume-graph', [volumeTrace], volumeLayout, {responsive: true});
 
@@ -822,7 +822,7 @@
                     categoryorder: 'array', // <-- FIX: Force order
                     categoryarray: processedData.allWeeksSorted // <-- FIX: Use master list
                 },
-                yaxis: { title: '1RM (lbs)' }
+                yaxis: { title: '1RM (kg)' }
             });
             Plotly.newPlot('exercise-1rm-graph', [rmTrace], rmLayout, {responsive: true});
         }
