@@ -6,14 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Workout Data Dashboard</title>
 
-    <!-- New styles from your layout -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com" rel="preconnect"/>
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
  
-    <!-- Load dependencies -->
     <script src="papaparse.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-2.33.0.min.js"></script>
     <script>
@@ -93,7 +91,6 @@
 <body class="bg-background-light dark:bg-background-dark font-display text-white">
     <div class="relative flex h-auto min-h-screen w-full flex-col">       
 
-        <!-- Top App Bar (Title will be updated by JS) -->
         <header class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10">
             <div class="flex size-12 shrink-0 items-center justify-start">
             </div>
@@ -102,10 +99,7 @@
             </div>
         </header>
        
-        <main class="flex-grow px-4 pb-24"> <!-- Add padding-bottom for bottom nav -->
-           
-            <!-- Loading / Upload Prompt -->
-            <div id="loading-indicator" class="text-center py-10">
+        <main class="flex-grow px-4 pb-24"> <div id="loading-indicator" class="text-center py-10">
                 <svg class="animate-spin h-8 w-8 text-primary mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -113,35 +107,35 @@
                 <p class="mt-4 text-white/70">Loading required libraries...</p>
             </div>
 
-            <!-- Dashboard Container (hidden by default) -->
             <div id="dashboard-container" class="hidden">
+                
+                <div class="flex justify-end px-2 mb-2">
+                    <label class="inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="limit-weeks-toggle" class="sr-only peer">
+                        <div class="relative w-11 h-6 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                        <span class="ms-3 text-sm font-medium text-white/70">Last 10 Weeks Only</span>
+                    </label>
+                </div>
+
                 <div id="tab-content-container">
                 
-                    <!-- Tab 1: Workout Consistency (from Layout 1) -->
                     <div id="tab-1" class="tab-content active">
 
-                        <!-- NEW: This Week's Goal -->
                         <h2 class="text-white tracking-light text-[28px] font-bold leading-tight text-center pb-3 pt-4">This Week's Goal</h2>
                         <div class="relative w-full max-w-xs mx-auto mb-6 flex justify-center items-center gap-6 py-4">
 
-                            <!-- The three goal dots -->
                             <div class="flex gap-4">
                                 <div id="goal-dot-1" class="w-5 h-5 rounded-full bg-white/10 transition-all duration-500"></div>
                                 <div id="goal-dot-2" class="w-5 h-5 rounded-full bg-white/10 transition-all duration-500"></div>
                                 <div id="goal-dot-3" class="w-5 h-5 rounded-full bg-white/10 transition-all duration-500"></div>
                             </div>
                         
-                            <!-- Text on the side -->
                             <div class="pl-4 text-center border-l border-white/10">
                                 <div id="goal-text" class="text-4xl font-bold text-white transition-all duration-500">0</div>
                                 <div class="text-xs text-white/60 block -mt-1">Workouts</div>
                             </div>
 
                         </div>
-
-                        <!-- END: This Week's Goal -->
-
-                        <!-- Stats -->
 
                         <div class="flex flex-wrap gap-4 pt-2">
                             <div class="flex min-w-0 flex-1 flex-col gap-2 rounded-xl p-4 bg-white/5 border border-white/10">
@@ -160,26 +154,19 @@
                             </div>
                         </div>
                     
-                        <!-- Headline Text -->
                         <h2 class="text-white tracking-light text-[28px] font-bold leading-tight text-left pb-3 pt-8">Workouts per Week</h2>
                    
-                        <!-- NEW Calendar Heatmap -->
                         <div id="workout-calendar-heatmap" class="w-full rounded-lg bg-white/5 border border-white/10 p-4">
+                            </div>
 
-                            <!-- Content will be generated by JS -->
-                        </div>
-
-                        <!-- Bar Chart (Original) - We can keep it or remove it. Let's keep it for now. -->
                         <h2 class="text-white tracking-light text-[28px] font-bold leading-tight text-left pb-3 pt-8">Workouts per Week (Chart)</h2>
                         <div class="bg-white/5 rounded-xl border border-white/10 p-4 mb-8">
                             <div id="workout-consistency-graph" class="w-full h-[350px] rounded-lg"></div>
                         </div>
                     </div>
 
-                    <!-- Tab 2: Strength Metrics (from Layout 2) -->
                     <div id="tab-2" class="tab-content">
 
-                        <!-- Hero Card (Static) -->
                         <div class="flex flex-col items-stretch justify-start rounded-xl bg-white/5 mt-2">
                             <div class="flex w-full min-w-72 grow flex-col items-stretch justify-center gap-1 p-6">
                                 <p class="text-[#92c9a4] text-sm font-normal leading-normal">Lifetime Lifted</p>
@@ -192,20 +179,17 @@
                             </div>
                         </div>
 
-                        <!-- Weekly Total Volume -->
                         <h3 class="text-white text-xl font-bold leading-tight tracking-[-0.015em] pb-2 pt-6">Weekly Total Volume</h3>
                         <div class="rounded-xl bg-white/5 p-4 border border-white/10">
                             <div id="weekly-volume-graph" class="w-full h-[600px] rounded-lg"></div>
                         </div>
 
-                        <!-- Body Part Balance (Sets) -->
                         <h3 class="text-white text-xl font-bold leading-tight tracking-[-0.015em] pb-2 pt-6">Body Part Balance (by Total Sets)</h3>
                         <div class="max-w-md mx-auto mb-4">
                             <label for="balance-time-filter" class="block text-sm font-medium text-[#92c9a4] mb-1">Select Time Period</label>
                             <select id="balance-time-filter" class="block w-full bg-white/5 border border-white/20 text-white rounded-lg p-3 text-base focus:border-primary focus:ring-primary">
                                 <option value="90">Last 90 Days</option>
                                 <option value="30">Last 30 Days</option>
-                                <option value="7">Last 7 Days</option>
                                 <option value="all">All Time</option>
                             </select>
                         </div>
@@ -214,9 +198,7 @@
                         </div>
                     </div>
 
-                    <!-- Tab 3: Strength by Exercise (from Layout 3) -->
                     <div id="tab-3" class="tab-content">
-                        <!-- Dropdown -->
                         <div class="max-w-md mx-auto my-6">
                             <label for="exercise-dropdown" class="block text-sm font-medium text-[#92c9a4] mb-1">Select an Exercise</label>
                             <select id="exercise-dropdown" class="block w-full bg-white/5 border border-white/20 text-white rounded-lg p-3 text-base focus:border-primary focus:ring-primary">
@@ -224,9 +206,22 @@
                             </select>
                         </div>
 
-                        <!-- Stats Cards -->
+                        <div class="rounded-xl bg-white/5 p-4 border border-white/10 mb-6 flex flex-col md:flex-row items-center gap-4 justify-between">
+                            <div class="flex flex-col">
+                                <h3 class="text-white font-bold text-lg">Target Goal</h3>
+                                <p class="text-white/60 text-xs">Set a 1RM goal for this exercise</p>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <input type="number" id="exercise-goal-input" placeholder="e.g. 100" class="bg-black/20 border border-white/10 rounded px-3 py-2 text-white w-24 text-right focus:border-primary focus:outline-none">
+                                <span class="text-white/60">kg</span>
+                            </div>
+                            <div class="flex flex-col items-end min-w-[100px]">
+                                <span id="goal-progress-text" class="text-primary font-bold text-xl">-- %</span>
+                                <span class="text-white/60 text-xs">to goal</span>
+                            </div>
+                        </div>
+
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                            <!-- Personal Best Card -->
                             <div class="flex flex-col items-stretch justify-start rounded-xl bg-white/5 overflow-hidden">
                                 <div class="flex w-full grow flex-col items-stretch justify-center gap-1 p-6">
                                     <p class="text-[#92c9a4] text-sm font-normal leading-normal">Personal Best</p>
@@ -238,7 +233,6 @@
                                 </div>
                             </div>
 
-                            <!-- Latest Set Card -->
                             <div class="flex flex-col items-stretch justify-start rounded-xl bg-white/5 overflow-hidden">
                                 <div class="flex w-full grow flex-col items-stretch justify-center gap-1 p-6">
                                     <p class="text-[#92c9a4] text-sm font-normal leading-normal">Latest Set</p>
@@ -251,22 +245,18 @@
                             </div>
                         </div>
 
-                        <!-- Charts Section -->
                         <section class="flex flex-col gap-4 rounded-xl bg-[#193322]/50 p-4">
-                            <!-- Volume Chart -->
                             <h2 class="text-white text-base font-medium leading-normal">Total Volume (kg)</h2>
                             <div class="flex min-h-[200px] flex-1 flex-col">
                                 <div id="exercise-volume-graph" class="w-full h-full rounded-lg"></div>
                             </div>
 
-                            <!-- 1RM Chart -->
                             <h2 class="text-white text-base font-medium leading-normal mt-6">Estimated 1RM (kg)</h2>
                             <div class="flex min-h-[200px] flex-1 flex-col">
                                 <div id="exercise-1rm-graph" class="w-full h-full rounded-lg"></div>
                             </div>
                         </section>
 
-                        <!-- Raw Data Table -->
                         <section class="mt-8">
                             <h2 class="text-white text-base font-medium leading-normal mb-4">Exercise Details</h2>
                             <div class="overflow-x-auto rounded-lg border border-white/10">
@@ -282,8 +272,7 @@
                                         </tr>
                                     </thead>
                                     <tbody id="exercise-raw-data" class="divide-y divide-white/10">
-                                        <!-- Data will be populated by JavaScript -->
-                                    </tbody>
+                                        </tbody>
                                 </table>
                             </div>
                         </section>
@@ -292,7 +281,6 @@
             </div>
         </main>
 
-        <!-- Bottom Navigation Bar -->
         <nav id="bottom-nav" class="sticky bottom-0 bg-background-dark/80 backdrop-blur-sm border-t border-white/10 hidden">
             <div class="mx-auto flex max-w-md justify-around p-2">
                 <a href="#" class="tab-btn flex flex-col items-center gap-1 p-2 rounded-lg w-20 active bg-primary/20" data-tab="tab-1" data-title="Consistency">
@@ -336,35 +324,10 @@
                 longest: 0
             }
         };
-
-        // --- NEW: Muscle Group Mapping ---
-        const muscleGroupMap = {
-            // Beine & Po
-            'Gesässmuskeln': 'Gluteus',
-            'Oberschenkelbeuger': 'Oberschenkel',
-            'Quadrizeps': 'Oberschenkel',
-            'Wadenmuskeln': 'Waden',
-            'Adduktoren': 'Oberschenkel',
-            
-            // Rücken
-            'Rückenmuskeln': 'Rücken',
-            'Lendenmuskeln': 'Rücken',
-
-            // Bauchmuskeln
-            'Gerade Bauchmuskeln': 'Bauchmuskeln',
-            'Schräge Bauchmuskeln': 'Bauchmuskeln',
-
-            // Arme
-            'Armbeuger': 'Arme',
-            'Armstrecker': 'Arme',
-
-            // Brust
-            'Brustmuskeln': 'Brust',
-            
-            // Schultern
-            'Schultermuskeln': 'Schultern',
-            'Kapuzenmuskel': 'Schultern'
-        };
+        
+        // NEW: State for features
+        let isTenWeekMode = false;
+        let userGoals = {}; // Stores { "Exercise Name": 100 }
 
         // --- PLOTLY LAYOUT (UPDATED FOR DARK MODE) ---
 
@@ -412,6 +375,13 @@
             }
             if (customConfig.polar) {
                 layout.polar = { ...layout.polar, ...customConfig.polar };
+            }
+            // Add shapes and annotations if present
+            if (customConfig.shapes) {
+                layout.shapes = customConfig.shapes;
+            }
+            if (customConfig.annotations) {
+                layout.annotations = customConfig.annotations;
             }
 
             // Apply all top-level properties from customConfig to layout
@@ -587,9 +557,7 @@
                                     date: date, year: date.getFullYear(), week_number: getWeekNumber(date),
                                     exercise: row['Übung'], bodyPart: row['Bereich'],
                                     isSet: isSet, isSkipped: false, reps: reps, weight: weight,
-                                    volume: volume, e1RM: e1RM,
-                                    primaryMuscles: row['Muskelgruppen (Primäre)'],
-                                    secondaryMuscles: row['Muskelgruppen (Sekundäre)']
+                                    volume: volume, e1RM: e1RM
                                 };
                             }).filter(row => row !== null && row.year >= 2022);
                            
@@ -763,6 +731,37 @@
            
             // Set initial header title
             document.getElementById('header-title').textContent = "Consistency";
+
+            // --- NEW: EVENT LISTENERS FOR FEATURES ---
+
+            // 1. Setup Toggle Listener
+            const toggle = document.getElementById('limit-weeks-toggle');
+            if(toggle) {
+                toggle.addEventListener('change', (e) => {
+                    isTenWeekMode = e.target.checked;
+                    // Redraw all relevant charts
+                    drawWorkoutConsistencyChart();
+                    drawWeeklyVolumeChart();
+                    drawExerciseCharts(document.getElementById('exercise-dropdown').value);
+                });
+            }
+
+            // 2. Setup Goal Input Listener
+            const goalInput = document.getElementById('exercise-goal-input');
+            if(goalInput) {
+                goalInput.addEventListener('input', (e) => {
+                    const currentExercise = document.getElementById('exercise-dropdown').value;
+                    const val = parseFloat(e.target.value);
+                    if(currentExercise) {
+                        if (!isNaN(val)) {
+                             userGoals[currentExercise] = val;
+                        } else {
+                            delete userGoals[currentExercise]; // Remove goal if input cleared
+                        }
+                        drawExerciseCharts(currentExercise); // Redraw to show line
+                    }
+                });
+            }
         }
 
         // --- CHART DRAWING FUNCTIONS ---
@@ -847,9 +846,14 @@
         }
 
         function drawWorkoutConsistencyChart() {
-            const data = processedData.workoutsPerWeek;
+            let data = processedData.workoutsPerWeek;
+            
+            // NEW: Filter if toggle is on
+            if (isTenWeekMode) {
+                data = data.slice(-10);
+            }
+
             const FULFILLED_GOAL = 3;
-           
             // NEW: Create color array based on goal
             const colors = data.map(d => d.workout_count >= FULFILLED_GOAL ? '#13ec5b' : 'rgba(255, 255, 255, 0.2)');
 
@@ -863,7 +867,7 @@
             };
            
             const layout = getPlotlyLayout({
-                title: { text: 'Weekly Workout Count' },
+                title: { text: isTenWeekMode ? 'Workouts (Last 10 Weeks)' : 'Weekly Workout Count' },
                 xaxis: {
                     title: 'Week',
                     type: 'category',
@@ -879,6 +883,11 @@
         function drawExerciseCharts(selectedExercise) {
             if (!selectedExercise) return;
            
+            // 1. Handle Goal Input Value
+            const goalInput = document.getElementById('exercise-goal-input');
+            const currentGoal = userGoals[selectedExercise] || "";
+            if (goalInput) goalInput.value = currentGoal; // Set input to saved goal
+
             // Get all raw sets for this exercise
             const rawSets = processedData.validSets.filter(set => set.exercise === selectedExercise)
                 .sort((a, b) => b.date - a.date); // Sort by date, newest first
@@ -886,16 +895,32 @@
             // Calculate personal best (highest single-set volume)
             const personalBest = rawSets.reduce((best, set) => {
                 const setVolume = set.reps * set.weight;
+
+                // Also track best 1RM for the goal check
+                if (set.e1RM > (best.max1RM || 0)) best.max1RM = set.e1RM; 
+
                 if (setVolume > best.volume) {
-                    return {
-                        volume: setVolume,
-                        reps: set.reps,
-                        weight: set.weight,
-                        date: set.date
-                    };
+                    return { ...best, volume: setVolume, reps: set.reps, weight: set.weight, date: set.date };
                 }
                 return best;
-            }, { volume: 0, reps: 0, weight: 0, date: null });
+            }, { volume: 0, reps: 0, weight: 0, date: null, max1RM: 0 });
+
+            // UPDATE GOAL PROGRESS TEXT
+            const progressText = document.getElementById('goal-progress-text');
+            if (currentGoal > 0 && personalBest.max1RM > 0) {
+                const percent = Math.round((personalBest.max1RM / currentGoal) * 100);
+                progressText.textContent = `${percent}%`;
+                // Color coding
+                if (percent >= 100) {
+                    progressText.classList.remove('text-red-500');
+                    progressText.classList.add('text-primary');
+                } else {
+                    progressText.classList.remove('text-primary');
+                    progressText.classList.add('text-red-500'); // Or keep it white/primary depending on preference
+                }
+            } else {
+                progressText.textContent = "-- %";
+            }
 
             // Get latest set
             const latestSet = rawSets[0] || { reps: 0, weight: 0, date: null };
@@ -914,7 +939,12 @@
                 latestSet.date ? `${latestSet.reps} reps × ${latestSet.weight}kg on ${latestSet.date.toLocaleDateString()}` : '--';
 
             // Group sets by week for the charts
-            const data = processedData.strengthByExercise.filter(d => d.Übung === selectedExercise);
+            let data = processedData.strengthByExercise.filter(d => d.Übung === selectedExercise);
+
+            // NEW: Filter if toggle is on
+            if (isTenWeekMode) {
+                data = data.slice(-10);
+            }
 
             // Volume Chart
             const volumeTrace = {
@@ -950,6 +980,7 @@
                 line: { color: '#ef4444', shape: 'spline' }, // Red color for 1RM
                 fillcolor: 'rgba(239, 68, 68, 0.1)'
             };
+            
             const rmLayout = getPlotlyLayout({
                 title: { text: 'Estimated 1RM' },
                 xaxis: {
@@ -960,6 +991,30 @@
                 },
                 yaxis: { title: '1RM (kg)' }
             });
+
+            // NEW: Add the Goal Line Shape
+            if (currentGoal > 0) {
+                rmLayout.shapes = [{
+                    type: 'line',
+                    xref: 'paper', x0: 0, x1: 1, // Span full width
+                    yref: 'y', y0: currentGoal, y1: currentGoal,
+                    line: {
+                        color: 'white',
+                        width: 2,
+                        dash: 'dot'
+                    }
+                }];
+                // Add label for the line
+                rmLayout.annotations = [{
+                    xref: 'paper', x: 1,
+                    yref: 'y', y: currentGoal,
+                    text: 'GOAL',
+                    showarrow: false,
+                    xanchor: 'right', yanchor: 'bottom',
+                    font: { color: 'white', size: 10 }
+                }];
+            }
+
             Plotly.newPlot('exercise-1rm-graph', [rmTrace], rmLayout, {responsive: true});
 
             // Update raw data table
@@ -1014,7 +1069,10 @@
                 const [year] = week.split('-W');
                 return !isNaN(parseInt(year));
             });
-            const lastFiveWeeks = validWeeks.slice(-5);
+            
+            // NEW: Respect the Toggle mode for weekly volume too
+            const limit = isTenWeekMode ? 10 : 5;
+            const lastWeeks = validWeeks.slice(-limit);
 
             // Group sets by week and exercise, calculate volume
             const weeklyExerciseVolumes = {};
@@ -1026,8 +1084,8 @@
                 if (isNaN(set.year)) return;
                 
                 const weekKey = `${set.year}-W${padWeek(set.week_number)}`;
-                // Only process sets from the last 5 weeks
-                if (lastFiveWeeks.includes(weekKey)) {
+                // Only process sets from the last X weeks
+                if (lastWeeks.includes(weekKey)) {
                     if (!weeklyExerciseVolumes[weekKey]) {
                         weeklyExerciseVolumes[weekKey] = { exercises: {}, total: 0 }; // <-- Re-added total
                     }
@@ -1043,12 +1101,12 @@
 
             // Create traces only for active exercises
             const traces = [...activeExercises].sort().map(exercise => {
-                const volumes = lastFiveWeeks.map(week => 
+                const volumes = lastWeeks.map(week => 
                     (weeklyExerciseVolumes[week]?.exercises[exercise]) || 0
                 );
 
                 return {
-                    x: lastFiveWeeks,
+                    x: lastWeeks,
                     y: volumes,
                     name: exercise,
                     type: 'bar',        // <-- CHANGED: Back to 'bar'
@@ -1058,7 +1116,7 @@
             });
             
             // Add total volume annotations
-            const annotations = lastFiveWeeks.map(week => {
+            const annotations = lastWeeks.map(week => {
                 const totalVolume = weeklyExerciseVolumes[week]?.total || 0;
                 return {
                     x: week,
@@ -1075,13 +1133,13 @@
             });
 
             const layout = getPlotlyLayout({
-                title: { text: 'Weekly Total Volume (Last 5 Weeks)' },
+                title: { text: `Weekly Total Volume (Last ${limit} Weeks)` },
                 barmode: 'stack', // <-- ADDED: This makes it a stacked bar chart
                 xaxis: {
                     title: 'Week',
                     type: 'category',
                     categoryorder: 'array', 
-                    categoryarray: lastFiveWeeks,
+                    categoryarray: lastWeeks,
                     tickangle: 0
                 },
                 yaxis: { 
@@ -1117,9 +1175,9 @@
             // --- NEW CODE: Update totals on legend click ---
             graphDiv.on('plotly_restyle', function(data) {
                 const newAnnotations = [];
-                const lastFiveWeeks = layout.xaxis.categoryarray; // Get weeks from layout
+                const lastWeeks = layout.xaxis.categoryarray; // Get weeks from layout
 
-                lastFiveWeeks.forEach((week, weekIndex) => {
+                lastWeeks.forEach((week, weekIndex) => {
                     let newTotal = 0;
                     
                     // Loop through all traces
@@ -1155,7 +1213,7 @@
         function drawBodyPartBalanceChart(timePeriod = '90') {
             const chartContainer = document.getElementById('body-part-balance-chart');
             const allSets = processedData.validSets || [];
-            if (!chartContainer) return; 
+            if (!chartContainer) return; // no container
             if (allSets.length === 0) {
                 chartContainer.innerHTML = '<p class="text-white/50 p-4 text-center">No data found for this time period.</p>';
                 return;
@@ -1175,36 +1233,17 @@
                 return;
             }
 
-            // --- Calculate weighted reps by main GROUP ---
-            const weightedRepsByGroup = {}; 
-            
-            filteredSets.forEach(set => {
-                const reps = set.reps; 
-                if (!reps || isNaN(reps)) return; 
+            // Group by bodyPart and count sets
+            const setsByBodyPart = groupBy(filteredSets, ['bodyPart']);
+            const labels = [];
+            const values = [];
 
-                // 1. Process Primary Muscles (weight: 1.0)
-                if (set.primaryMuscles) {
-                    const primary = set.primaryMuscles.split(',').map(m => m.trim()).filter(Boolean);
-                    primary.forEach(muscleName => {
-                        const group = muscleGroupMap[muscleName] || 'Andere'; // Find the group
-                        weightedRepsByGroup[group] = (weightedRepsByGroup[group] || 0) + (reps * 1.0); // Add to group
-                    });
-                }
-
-                // 2. Process Secondary Muscles (weight: 0.5)
-                if (set.secondaryMuscles) {
-                    const secondary = set.secondaryMuscles.split(',').map(m => m.trim()).filter(Boolean);
-                    secondary.forEach(muscleName => {
-                        const group = muscleGroupMap[muscleName] || 'Andere'; // Find the group
-                        weightedRepsByGroup[group] = (weightedRepsByGroup[group] || 0) + (reps * 0.5); // Add to group
-                    });
+            Object.entries(setsByBodyPart).forEach(([bodyPart, arr]) => {
+                if (bodyPart && bodyPart.trim() !== '' && bodyPart !== 'undefined') {
+                    labels.push(bodyPart);
+                    values.push(arr.length);
                 }
             });
-
-            // Extract the sorted labels (groups) and values
-            const labels = Object.keys(weightedRepsByGroup).sort();
-            const values = labels.map(group => weightedRepsByGroup[group]);
-            // --- END NEW ---
 
             if (labels.length === 0) {
                 chartContainer.innerHTML = '<p class="text-white/50 p-4 text-center">No data found for this time period.</p>';
@@ -1218,25 +1257,23 @@
             const trace = {
                 type: 'scatterpolar',
                 r: values,
-                theta: labels, // Use the new group labels
+                theta: labels,
                 fill: 'toself',
                 fillcolor: 'rgba(19, 236, 91, 0.25)',
                 line: { color: '#13ec5b' },
-                name: 'Weighted Reps'
+                name: 'Sets'
             };
 
             const layout = getPlotlyLayout({
-                title: { text: `Weighted Reps per Muscle Group (${timePeriod === 'all' ? 'All Time' : 'Last ' + timePeriod + ' Days'})` },
-                dragmode: 'rotate' // Ensure rotation is enabled
+                title: { text: `Total Sets per Body Part (${timePeriod === 'all' ? 'All Time' : 'Last ' + timePeriod + ' Days'})` },
+                dragmode: false
             });
-            
-            const maxVal = Math.max(...values.slice(0, -1)); // Get max before repeating
-            
+
             layout.polar = {
-                bgcolor: 'rgba(255, 255, 255, 0.03)', // <-- FIXED TYPO (was 25F5)
+                bgcolor: 'rgba(255,255,255,0.03)',
                 radialaxis: {
                     visible: true,
-                    range: [0, Math.max(maxVal, 10)], // <-- Set a minimum range of 10
+                    range: [0, Math.max(...values.slice(0, -1))],
                     gridcolor: 'rgba(255,255,255,0.1)',
                     linecolor: 'rgba(255,255,255,0.1)'
                 },
